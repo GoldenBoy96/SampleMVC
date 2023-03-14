@@ -1,18 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public AudioClip clip;
+    // Static singleton property.
+    public static AudioManager Instance { get; private set; }
+    void Awake()    {
+        // Save a reference to the AudioManager component as our //singleton instance.
+        Instance = this;
     }
-
-    // Update is called once per frame
-    void Update()
+    // Instance method, this method can be accessed through the //singleton instance
+    public void PlayAudio(AudioClip clip)
     {
-        
+        //audio.clip = clip;
+        //audio.Play();
     }
 }
