@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Board 
+public class Board
 {
     private int _edgeLength;
 
@@ -18,12 +18,16 @@ public class Board
         Boards = new List<List<Cell>>();
         int rowCount;
         int colCount;
+        int location = 0;
         for (rowCount = 0; rowCount < _edgeLength; rowCount++)
         {
             List<Cell> row = new List<Cell>();
             for (colCount = 0; colCount < _edgeLength; colCount++)
             {
-                row.Add(new Cell());
+                Cell cell = new Cell();
+                cell.Location = location;
+                row.Add(cell);
+                location++;
             }
             Boards.Add(row);
         }
@@ -31,15 +35,21 @@ public class Board
     public Board(int edgeLength)
     {
         _edgeLength = edgeLength;
+        Boards = new List<List<Cell>>();
         int rowCount;
         int colCount;
-        for(rowCount = 0; rowCount < edgeLength; rowCount++)
+        int location = 0;
+        for (rowCount = 0; rowCount < _edgeLength; rowCount++)
         {
             List<Cell> row = new List<Cell>();
-            for(colCount = 0; colCount < edgeLength; colCount++)
+            for (colCount = 0; colCount < _edgeLength; colCount++)
             {
-                row.Add(new Cell());
+                Cell cell = new Cell();
+                cell.Location = location;
+                row.Add(cell);
+                location++;
             }
+            Boards.Add(row);
         }
     }
 
@@ -54,7 +64,7 @@ public class Board
             Debug.Log("Out of bound");
             return 0;
         }
-        
+
     }
 
     public void SetCellValue(int row, int col, int value)
@@ -80,5 +90,5 @@ public class Board
     {
         Debug.Log(_boards);
     }
-    
+
 }

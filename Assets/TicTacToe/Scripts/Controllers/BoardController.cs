@@ -13,20 +13,32 @@ public class BoardController : MonoBehaviour
 
     private BoardView _boardView;
 
+    private float _cellSize = 1;
+
+    public Board BoardModel { get => _boardModel; set => _boardModel = value; }
+
     //public Board BoardModel { get => _boardModel; set => _boardModel = value; }
     //public BoardView BoardView { get => _boardView; set => _boardView = value; }
 
     void Start()
     {
         Board = (GameObject)Resources.Load("Prefabs/Board");
-        InitBoard();
-        Debug.Log(_boardModel);
+
+        if (GetComponent<CellController>() == null)
+        {
+            gameObject.AddComponent<CellController>();
+        }
+
+        
+
+        CreateBoard();
+        PrintBoard();
     }
 
-    public void InitBoard()
+    public void CreateBoard()
     {
-        _boardModel = new Board();
-        GameObject boardObject = Instantiate(Board);
+        BoardModel = new Board();
+        GameObject boardObject = Instantiate(Board, transform);
         if (boardObject.GetComponent<BoardView>() == null)
         {
             boardObject.AddComponent<BoardView>();
@@ -36,10 +48,10 @@ public class BoardController : MonoBehaviour
         GenerateCellOnBoard();
     }
 
-    public void InitBoard(Board boardModel)
+    public void CreateBoard(Board boardModel)
     {
-        _boardModel = boardModel;
-        GameObject boardObject = Instantiate(Board);
+        BoardModel = boardModel;
+        GameObject boardObject = Instantiate(Board, transform);
         if (boardObject.GetComponent<BoardView>() == null)
         {
             boardObject.AddComponent<BoardView>();
@@ -50,25 +62,54 @@ public class BoardController : MonoBehaviour
     }
 
     private void GenerateCellOnBoard()
-    {
-        if (_boardModel != null && _boardView != null)
+    {       
+
+        if (BoardModel != null && _boardView != null)
         {
+            CellController cellController = GetComponent<CellController>();
             int row;
             int col;
-            for (row = 0; row < _boardModel.EdgeLength; row++)
+            for (row = 0; row < BoardModel.EdgeLength; row++)
             {
-                for (col = 0; col < _boardModel.EdgeLength; col++)
+                for (col = 0; col < BoardModel.EdgeLength; col++)
                 {
-                    Debug.Log(_boardModel.Boards[row][col]);
-                    CellController cellController = new CellController();
-                    cellController.InitCell(_boardModel.Boards[row][col]);
+                    GameObject cellView = cellController.CreateCell(BoardModel.Boards[row][col]);
+                    float w = col * _cellSize - 1;
+                    float h = row * _cellSize - 1;
+                    cellView.gameObject.transform.parent = _boardView.gameObject.transform;
+                    cellView.transform.position = new Vector2(w, h);
                 }
             }
         }
+        //Debug.Log(BoardModel);
     }
 
     public void SetPosition()
     {
+
+    }
+
+    public void PrintBoard()
+    {
+        string board = "" ;
+        if (BoardModel != null && _boardView != null)
+        {
+            CellController cellController = GetComponent<CellController>();
+            int row;
+            int col;
+            for (row = 0; row < BoardModel.EdgeLength; row++)
+            {
+                
+                for (col = 0; col < BoardModel.EdgeLength; col++)
+                {
+                    board += BoardModel.Boards[row][col].Location.ToString() + " ";
+                    
+                }
+                board += " | ";
+                Debug.Log(board.ToString());
+
+            }
+        }
 
     }
 }

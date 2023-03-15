@@ -6,29 +6,33 @@ using UnityEngine;
 public class CellView : MonoBehaviour
 {
 
-    //private Cell _cell;
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-        
-    //}
+    // Start is called before the first frame update
+    void Start()
+    {
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
+    }
 
-    //public void InitCell(Cell cell)
-    //{
-    //    this._cell = cell;
+    void OnMouseDown()
+    {
+        GameManager.CellController.OnClick((gameObject.GetComponent<CellView>()));
+    }
 
-        
-
-    //    this._cell.Status = 2;
-
-    //    Debug.Log(cell);
-
-    //    Debug.Log(this._cell);
-    //}
+    public void UpdateView(int status)
+    {
+        switch(status)
+        {
+            case 0:
+                break;
+            case 1:
+                GameObject o = GameManager.OSymbolPool.Pop();
+                o.transform.parent = gameObject.transform;
+                o.transform.localPosition = Vector3.zero;
+                o.transform.localScale = Vector3.one;
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+    }
 }

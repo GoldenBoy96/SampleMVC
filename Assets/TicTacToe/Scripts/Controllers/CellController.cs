@@ -9,9 +9,9 @@ public class CellController : MonoBehaviour
 {
     public GameObject Cell;
 
-    private Cell _cellModel;
+    private List<Cell> _cellModels;
 
-    private CellView _cellView;
+    private List<CellView> _cellViews;
 
     //public Cell CellModel { get => _cellModel; set => _cellModel = value; }
     //public CellView CellView { get => _cellView; set => _cellView = value; }
@@ -19,31 +19,46 @@ public class CellController : MonoBehaviour
     void Start()
     {
         Cell = (GameObject)Resources.Load("Prefabs/Cell");
+        _cellModels = new List<Cell>();
+        _cellViews = new List<CellView>();
         //InitCell();
     }
 
-    public void InitCell()
+    public void CreateCell()
     {
-        _cellModel = new Cell();
+        Cell cellModel = new Cell();
         GameObject cellObject = Instantiate(Cell);
         if (cellObject.GetComponent<CellView>() == null)
         {
             cellObject.AddComponent<CellView>();
 
         }
-        _cellView = cellObject.GetComponent<CellView>();
+        CellView cellView = cellObject.GetComponent<CellView>();
+
+        _cellModels.Add(cellModel);
+        _cellViews.Add(cellView);
     }
 
-    public void InitCell(Cell cellModel)
+    public GameObject CreateCell(Cell cell)
     {
-        _cellModel = cellModel;
+        Debug.Log(cell);
         GameObject cellObject = Instantiate(Cell);
         if (cellObject.GetComponent<CellView>() == null)
         {
             cellObject.AddComponent<CellView>();
 
         }
-        _cellView = cellObject.GetComponent<CellView>();
+        CellView cellView = cellObject.GetComponent<CellView>();        
+
+        _cellModels.Add(cell);
+        _cellViews.Add(cellView);
+
+        return cellObject;
+    }
+
+    public Cell GetCell(int index)
+    {
+        return _cellModels[index];
     }
 
     public void SetPosition()
@@ -51,6 +66,11 @@ public class CellController : MonoBehaviour
         
     }
 
+    public void OnClick(CellView cellView)
+    {
+        Debug.Log(_cellModels[_cellViews.IndexOf(cellView)].Location);
+        cellView.UpdateView(1);
+    }
 
 
 }

@@ -8,9 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7476980688061478346}
+  - component: {fileID: 8277350696188195010}
   - component: {fileID: 4399491255242054579}
   - component: {fileID: 4110935276310178934}
+  - component: {fileID: 7544924817799440113}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -18,8 +19,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &7476980688061478346
-RectTransform:
+--- !u!4 &8277350696188195010
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -33,11 +34,6 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 3, y: 3}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &4399491255242054579
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -102,3 +98,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a831b8c5f57b1ee45af77deb555786ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!156049354 &7544924817799440113
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1821770186821531686}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0

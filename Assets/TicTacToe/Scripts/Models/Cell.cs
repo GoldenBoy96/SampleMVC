@@ -11,6 +11,8 @@ public class Cell
     //status == 1 mean => cell contain X symbol
     //status == 2 mean => cell contain O symbol
     private int _status;
+
+    private int _location;
     
     public Cell()
     {
@@ -23,5 +25,6 @@ public class Cell
     }
 
     public int Status { get => _status; set => _status = value; }
+    public int Location { get => _location; set => _location = value; }
 }
 
