@@ -28,6 +28,7 @@ public class CellView : MonoBehaviour
                 o.transform.parent = gameObject.transform;
                 o.transform.localPosition = Vector3.zero;
                 o.transform.localScale = Vector3.one;
+                o.GetComponent<SpriteRenderer>().sortingOrder = 1;
                 break;
             case 2:
                 break;

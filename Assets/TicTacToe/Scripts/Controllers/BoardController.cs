@@ -75,7 +75,7 @@ public class BoardController : MonoBehaviour
                 {
                     GameObject cellView = cellController.CreateCell(BoardModel.Boards[row][col]);
                     float w = col * _cellSize - 1;
-                    float h = row * _cellSize - 1;
+                    float h = row * -_cellSize + 1;
                     cellView.gameObject.transform.parent = _boardView.gameObject.transform;
                     cellView.transform.position = new Vector2(w, h);
                 }

@@ -70,6 +70,7 @@ public class CellController : MonoBehaviour
     {
         Debug.Log(_cellModels[_cellViews.IndexOf(cellView)].Location);
         cellView.UpdateView(1);
+        //Add call bot player here
     }
 
 

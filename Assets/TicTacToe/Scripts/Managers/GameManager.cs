@@ -34,14 +34,11 @@ public class GameManager : MonoBehaviour
         XSymbolPool = gameObject.AddComponent<GameObjectPool>();
         OSymbolPool = gameObject.AddComponent<GameObjectPool>();
 
-        int symbolIndex;
+        //int symbolTotal = BoardController.BoardModel.EdgeLength;
+        //symbolTotal = symbolTotal * symbolTotal;
         int symbolTotal = 9;
-        for(symbolIndex = 0; symbolIndex < symbolTotal; symbolIndex++)
-        {
-            XSymbolPool.CreatePool(symbolX, symbolTotal);
-            OSymbolPool.CreatePool(symbolO, symbolTotal);
-
-        }
+        XSymbolPool.CreatePool(symbolX, symbolTotal);
+        OSymbolPool.CreatePool(symbolO, symbolTotal);
     }
 
     // Update is called once per frame
