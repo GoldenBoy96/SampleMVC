@@ -32,7 +32,7 @@ public class BoardController : MonoBehaviour
         
 
         CreateBoard();
-        PrintBoard();
+        //PrintBoard();
     }
 
     public void CreateBoard()
