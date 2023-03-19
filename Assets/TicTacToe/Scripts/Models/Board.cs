@@ -85,7 +85,7 @@ public class Board
     {
         if ((row < _edgeLength && row >= 0) && (col < _edgeLength && col >= 0))
         {
-            return _boards[row][col].Status;
+            return _boards[row][col].State;
         }
         else
         {
@@ -101,7 +101,7 @@ public class Board
         {
             if (value >= 0 && value < 3)
             {
-                _boards[row][col].Status = value;
+                _boards[row][col].State = value;
             }
             else
             {

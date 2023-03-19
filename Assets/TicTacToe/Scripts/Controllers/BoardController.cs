@@ -126,7 +126,7 @@ public class BoardController : MonoBehaviour
         {
             for (col = 0; col < BoardModel.EdgeLength; col++)
             {
-                if (BoardModel.Boards[row][col].Status == 0)
+                if (BoardModel.Boards[row][col].State == 0)
                 {
                     availableCells.Add(BoardModel.Boards[row][col]);
                 }
@@ -186,7 +186,7 @@ public class BoardController : MonoBehaviour
                 for (col = 0; col < BoardModel.EdgeLength; col++)
                 {
                     //board += BoardModel.Boards[row][col].Location.ToString() + " ";
-                    board += BoardModel.Boards[row][col].Status.ToString() + " ";
+                    board += BoardModel.Boards[row][col].State.ToString() + " ";
                 }
                 board += " | ";
 
@@ -232,7 +232,7 @@ public class BoardController : MonoBehaviour
         {
             if (distance >= 0 && distance < _pointToEndGame)
             {
-                if (GetCell(distance, col).Status == cell.Status)
+                if (GetCell(distance, col).State == cell.State)
                 {
                     count++;
                 }
@@ -240,7 +240,7 @@ public class BoardController : MonoBehaviour
         }
         if (count >= _pointToEndGame)
         {
-            return cell.Status;
+            return cell.State;
         }
         return 0;
     }
@@ -255,7 +255,7 @@ public class BoardController : MonoBehaviour
         {
             if (distance >= 0 && distance < _pointToEndGame)
             {
-                if (GetCell(row, distance).Status == cell.Status)
+                if (GetCell(row, distance).State == cell.State)
                 {
                     count++;
                 }
@@ -263,7 +263,7 @@ public class BoardController : MonoBehaviour
         }
         if (count >= _pointToEndGame)
         {
-            return cell.Status;
+            return cell.State;
         }
         return 0;
     }
@@ -280,7 +280,7 @@ public class BoardController : MonoBehaviour
         {
             if ((row + distance) >= 0 && (col + distance) >= 0 && (row + distance) < _pointToEndGame && (col + distance) < _pointToEndGame)
             {
-                if (GetCell(row + distance, col + distance).Status == cell.Status)
+                if (GetCell(row + distance, col + distance).State == cell.State)
                 {
                     count++;
                 }
@@ -288,7 +288,7 @@ public class BoardController : MonoBehaviour
         }
         if (count >= _pointToEndGame)
         {
-            return cell.Status;
+            return cell.State;
         }
 
         count = 0;
@@ -296,7 +296,7 @@ public class BoardController : MonoBehaviour
         {
             if ((row - distance) >= 0 && (col + distance) >= 0 && (row - distance) < _pointToEndGame && (col + distance) < _pointToEndGame)
             {
-                if (GetCell(row - distance, col + distance).Status == cell.Status)
+                if (GetCell(row - distance, col + distance).State == cell.State)
                 {
                     count++;
                 }
@@ -304,7 +304,7 @@ public class BoardController : MonoBehaviour
         }
         if (count >= _pointToEndGame)
         {
-            return cell.Status;
+            return cell.State;
         }
 
         return 0;

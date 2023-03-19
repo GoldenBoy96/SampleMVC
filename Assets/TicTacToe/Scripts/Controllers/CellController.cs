@@ -68,7 +68,7 @@ public class CellController : MonoBehaviour
 
     public void SetCell(CellView cellView, int value)
     {
-        CellModels[CellViews.IndexOf(cellView)].Status = value;
+        CellModels[CellViews.IndexOf(cellView)].State = value;
     }
 
     public CellView GetCellView(Cell cell)
@@ -88,7 +88,7 @@ public class CellController : MonoBehaviour
         Cell onClickCell = GetCell(cellView);
         if (!GameManager.Instance.IsPause())
         {
-            if (GetCell(cellView).Status == 0)
+            if (GetCell(cellView).State == 0)
             {
                 cellView.UpdateView(1);
                 SetCell(cellView, 1);

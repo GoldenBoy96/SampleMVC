@@ -25,9 +25,9 @@ public class BotController : MonoBehaviour
             while (true)
             {
                 randomIndex = Random.Range(0, availableCells.Count);
-                if (availableCells[randomIndex].Status == 0)
+                if (availableCells[randomIndex].State == 0)
                 {
-                    availableCells[randomIndex].Status = 2;
+                    availableCells[randomIndex].State = 2;
                     CellView cellView = GameManager.CellController.GetCellView(availableCells[randomIndex]);
                     cellView.UpdateView(2);
 
