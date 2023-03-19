@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,10 @@ public class BoardController : MonoBehaviour
 
     private float _cellSize = 1;
 
+    private int _pointToEndGame;
+
     public Board BoardModel { get => _boardModel; set => _boardModel = value; }
 
-    //public Board BoardModel { get => _boardModel; set => _boardModel = value; }
-    //public BoardView BoardView { get => _boardView; set => _boardView = value; }
 
     void Start()
     {
@@ -29,9 +30,12 @@ public class BoardController : MonoBehaviour
             gameObject.AddComponent<CellController>();
         }
 
-        
+
+        //Board test = new(4);
+        //CreateBoard(test);
 
         CreateBoard();
+        SetEndPoint();
         //PrintBoard();
     }
 
@@ -62,11 +66,11 @@ public class BoardController : MonoBehaviour
     }
 
     private void GenerateCellOnBoard()
-    {       
+    {
 
         if (BoardModel != null && _boardView != null)
         {
-            CellController cellController = GetComponent<CellController>();
+            CellController cellController = GameManager.CellController;
             int row;
             int col;
             for (row = 0; row < BoardModel.EdgeLength; row++)
@@ -84,14 +88,93 @@ public class BoardController : MonoBehaviour
         //Debug.Log(BoardModel);
     }
 
-    public void SetPosition()
+    private void SetEndPoint()
     {
+        if (BoardModel.EdgeLength == 3)
+        {
+            _pointToEndGame = 3;
+        }
+        else
+        {
+            _pointToEndGame = 5;
+        }
+    }
 
+    public void UpdateBoardValue(Cell cell, int value)
+    {
+        int row;
+        int col;
+        for (row = 0; row < BoardModel.EdgeLength; row++)
+        {
+            for (col = 0; col < BoardModel.EdgeLength; col++)
+            {
+                if (BoardModel.Boards[row][col] == cell)
+                {
+                    BoardModel.SetCellValue(row, col, value);
+                    return;
+                }
+            }
+        }
+    }
+
+    public List<Cell> GetAvailableCells()
+    {
+        List<Cell> availableCells = new List<Cell>();
+        int row;
+        int col;
+        for (row = 0; row < BoardModel.EdgeLength; row++)
+        {
+            for (col = 0; col < BoardModel.EdgeLength; col++)
+            {
+                if (BoardModel.Boards[row][col].Status == 0)
+                {
+                    availableCells.Add(BoardModel.Boards[row][col]);
+                }
+            }
+        }
+        return availableCells;
+    }
+    public void SetPosition(float x, float y)
+    {
+        _boardView.transform.position = new Vector2(x, y);
+    }
+
+    public Vector2 GetPosition(Cell cell)
+    {
+        int row;
+        int col;
+        for (row = 0; row < BoardModel.EdgeLength; row++)
+        {
+            for (col = 0; col < BoardModel.EdgeLength; col++)
+            {
+                if (BoardModel.Boards[row][col] == cell)
+                {
+                    return new Vector2(row, col);
+                }
+            }
+        }
+        return Vector2.zero;
+    }
+
+    public Cell GetCell(int row, int col)
+    {
+        return BoardModel.Boards[row][col];
+    }
+
+    public void SwapCell()
+    {
+        //This function is not yet available
+        //If in the future, any feature require swapping location of 2 cells, please put the code here
+    }
+
+    public void DropCell()
+    {
+        //This function is not yet available
     }
 
     public void PrintBoard()
     {
-        string board = "" ;
+        string board = "";
         if (BoardModel != null && _boardView != null)
         {
             CellController cellController = GetComponent<CellController>();
@@ -99,17 +182,131 @@ public class BoardController : MonoBehaviour
             int col;
             for (row = 0; row < BoardModel.EdgeLength; row++)
             {
-                
+
                 for (col = 0; col < BoardModel.EdgeLength; col++)
                 {
-                    board += BoardModel.Boards[row][col].Location.ToString() + " ";
-                    
+                    //board += BoardModel.Boards[row][col].Location.ToString() + " ";
+                    board += BoardModel.Boards[row][col].Status.ToString() + " ";
                 }
                 board += " | ";
-                Debug.Log(board.ToString());
+
 
             }
         }
+        Debug.Log(board.ToString());
+    }
 
+    public int CheckEndGame(Cell cell)
+    {
+        int checkRow = CheckRow(cell);
+        int checkCol = CheckCol(cell);
+        int checkDiagonal = CheckDiagonal(cell);
+        if (checkRow == 1 || checkCol == 1 || checkDiagonal == 1)
+        {
+            Debug.Log("Win");
+            GameManager.Instance.PauseGame();
+            return 1;
+        }
+        else if (checkRow == 2 || checkCol == 2 || checkDiagonal == 2)
+        {
+            Debug.Log("Lose");
+            GameManager.Instance.PauseGame();
+            return 2;
+        }
+        else if (GetAvailableCells().Count == 0)
+        {
+            Debug.Log("Draw");
+            GameManager.Instance.PauseGame();
+            return 0;
+        }
+        return 0;
+    }
+
+    private int CheckCol(Cell cell)
+    {
+        int count = 0;
+        int distance;        
+        Vector2 cellPosition = GetPosition(cell);
+        int col = (int)cellPosition.y;
+        for (distance = (int)(cellPosition.x - _pointToEndGame + 1); distance < cellPosition.x + _pointToEndGame; distance++)
+        {
+            if (distance >= 0 && distance < _pointToEndGame)
+            {
+                if (GetCell(distance, col).Status == cell.Status)
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= _pointToEndGame)
+        {
+            return cell.Status;
+        }
+        return 0;
+    }
+
+    private int CheckRow(Cell cell)
+    {
+        int count = 0;
+        int distance;
+        Vector2 cellPosition = GetPosition(cell);
+        int row = (int)cellPosition.x;
+        for (distance = (int)(cellPosition.y - _pointToEndGame + 1); distance < cellPosition.y + _pointToEndGame; distance++)
+        {
+            if (distance >= 0 && distance < _pointToEndGame)
+            {
+                if (GetCell(row, distance).Status == cell.Status)
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= _pointToEndGame)
+        {
+            return cell.Status;
+        }
+        return 0;
+    }
+
+    
+    private int CheckDiagonal(Cell cell)
+    {
+        int count = 0;
+        int distance;
+        Vector2 cellPosition = GetPosition(cell);
+        int row = (int)cellPosition.x;
+        int col = (int)cellPosition.y;
+        for (distance = - _pointToEndGame + 1; distance < _pointToEndGame; distance++)
+        {
+            if ((row + distance) >= 0 && (col + distance) >= 0 && (row + distance) < _pointToEndGame && (col + distance) < _pointToEndGame)
+            {
+                if (GetCell(row + distance, col + distance).Status == cell.Status)
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= _pointToEndGame)
+        {
+            return cell.Status;
+        }
+
+        count = 0;
+        for (distance = -_pointToEndGame + 1; distance < _pointToEndGame; distance++)
+        {
+            if ((row - distance) >= 0 && (col + distance) >= 0 && (row - distance) < _pointToEndGame && (col + distance) < _pointToEndGame)
+            {
+                if (GetCell(row - distance, col + distance).Status == cell.Status)
+                {
+                    count++;
+                }
+            }
+        }
+        if (count >= _pointToEndGame)
+        {
+            return cell.Status;
+        }
+
+        return 0;
     }
 }

@@ -13,14 +13,14 @@ public class CellController : MonoBehaviour
 
     private List<CellView> _cellViews;
 
-    //public Cell CellModel { get => _cellModel; set => _cellModel = value; }
-    //public CellView CellView { get => _cellView; set => _cellView = value; }
+    public List<Cell> CellModels { get => _cellModels; set => _cellModels = value; }
+    public List<CellView> CellViews { get => _cellViews; set => _cellViews = value; }
 
     void Start()
     {
         Cell = (GameObject)Resources.Load("Prefabs/Cell");
-        _cellModels = new List<Cell>();
-        _cellViews = new List<CellView>();
+        CellModels = new List<Cell>();
+        CellViews = new List<CellView>();
         //InitCell();
     }
 
@@ -35,13 +35,13 @@ public class CellController : MonoBehaviour
         }
         CellView cellView = cellObject.GetComponent<CellView>();
 
-        _cellModels.Add(cellModel);
-        _cellViews.Add(cellView);
+        CellModels.Add(cellModel);
+        CellViews.Add(cellView);
     }
 
     public GameObject CreateCell(Cell cell)
     {
-        Debug.Log(cell);
+        //Debug.Log(cell);
         GameObject cellObject = Instantiate(Cell);
         if (cellObject.GetComponent<CellView>() == null)
         {
@@ -50,15 +50,30 @@ public class CellController : MonoBehaviour
         }
         CellView cellView = cellObject.GetComponent<CellView>();        
 
-        _cellModels.Add(cell);
-        _cellViews.Add(cellView);
+        CellModels.Add(cell);
+        CellViews.Add(cellView);
 
         return cellObject;
     }
 
     public Cell GetCell(int index)
     {
-        return _cellModels[index];
+        return CellModels[index];
+    }
+
+    public Cell GetCell(CellView cellView)
+    {
+        return CellModels[CellViews.IndexOf(cellView)];
+    }
+
+    public void SetCell(CellView cellView, int value)
+    {
+        CellModels[CellViews.IndexOf(cellView)].Status = value;
+    }
+
+    public CellView GetCellView(Cell cell)
+    {
+        return CellViews[CellModels.IndexOf(cell)];
     }
 
     public void SetPosition()
@@ -66,11 +81,30 @@ public class CellController : MonoBehaviour
         
     }
 
+    
+
     public void OnClick(CellView cellView)
     {
-        Debug.Log(_cellModels[_cellViews.IndexOf(cellView)].Location);
-        cellView.UpdateView(1);
-        //Add call bot player here
+        Cell onClickCell = GetCell(cellView);
+        if (!GameManager.Instance.IsPause())
+        {
+            if (GetCell(cellView).Status == 0)
+            {
+                cellView.UpdateView(1);
+                SetCell(cellView, 1);
+                //Add call bot player here
+                GameManager.BoardController.CheckEndGame(onClickCell);
+                if (!GameManager.Instance.IsPause())
+                {
+                    GameManager.BotController.OnTurn();
+                };
+
+
+                //GameManager.BoardController.PrintBoard();
+            }
+        }
+
+        GameManager.BoardController.CheckEndGame(onClickCell);
     }
 
 

@@ -9,8 +9,14 @@ public class Board
 
     private List<List<Cell>> _boards;
 
+    //type include 2 value:
+    //1) 0 => it means this board is used for Tic-tac-toe game
+    //2) 1 => it means this board is used for normal caro game
+    private int _type;
+
     public int EdgeLength { get => _edgeLength; set => _edgeLength = value; }
     public List<List<Cell>> Boards { get => _boards; set => _boards = value; }
+    public int Type { get => _type; set => _type = value; }
 
     public Board()
     {
@@ -18,39 +24,61 @@ public class Board
         Boards = new List<List<Cell>>();
         int rowCount;
         int colCount;
-        int location = 0;
+        int id = 0;
         for (rowCount = 0; rowCount < _edgeLength; rowCount++)
         {
             List<Cell> row = new List<Cell>();
             for (colCount = 0; colCount < _edgeLength; colCount++)
             {
                 Cell cell = new Cell();
-                cell.Location = location;
+                cell.Id = id;
                 row.Add(cell);
-                location++;
+                id++;
             }
             Boards.Add(row);
         }
+        Type = 0;
     }
     public Board(int edgeLength)
     {
-        _edgeLength = edgeLength;
-        Boards = new List<List<Cell>>();
-        int rowCount;
-        int colCount;
-        int location = 0;
-        for (rowCount = 0; rowCount < _edgeLength; rowCount++)
+        bool isValid = false;
+        if (edgeLength == 3)
         {
-            List<Cell> row = new List<Cell>();
-            for (colCount = 0; colCount < _edgeLength; colCount++)
-            {
-                Cell cell = new Cell();
-                cell.Location = location;
-                row.Add(cell);
-                location++;
-            }
-            Boards.Add(row);
+            Type = 0;
+            isValid = true;
+        } 
+        else if (edgeLength >= 5)
+        {
+            Type = 1;
+            isValid |= true;
         }
+
+        if (isValid)
+        {
+            _edgeLength = edgeLength;
+            Boards = new List<List<Cell>>();
+            int rowCount;
+            int colCount;
+            int id = 0;
+            for (rowCount = 0; rowCount < _edgeLength; rowCount++)
+            {
+                List<Cell> row = new List<Cell>();
+                for (colCount = 0; colCount < _edgeLength; colCount++)
+                {
+                    Cell cell = new Cell();
+                    cell.Id = id;
+                    row.Add(cell);
+                    id++;
+                }
+                Boards.Add(row);
+            }
+        } 
+        else
+        {
+            throw new System.Exception("Invalit input! Must be 3 or larger than 5.");
+        }
+        
+
     }
 
     public int GetCellValue(int row, int col)
